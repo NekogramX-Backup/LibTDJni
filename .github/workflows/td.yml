@@ -6,19 +6,8 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v2
     - name: Build TDLib
-      run: |
-        mkdir build && cd build
-        export CXXFLAGS="-stdlib=libc++"
-        CC=/usr/bin/clang CXX=/usr/bin/clang++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=.. -DTD_ENABLE_JNI=ON ..
-        cmake --build . --target install
-        cd ../..
-        mkdir build && cd build
-        CC=/usr/bin/clang CXX=/usr/bin/clang++ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX:PATH=../td/tdlib -DTd_DIR:PATH="$(readlink -e ../td/lib/cmake/Td)" ..
-        cmake --build . --target install
-        cd ..
+      run: docker build .
