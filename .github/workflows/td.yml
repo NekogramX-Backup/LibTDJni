@@ -10,4 +10,4 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build TDLib
-      run: docker run debian:buster -t .:/td bash /td/build.sh
+      run: docker run -t .:/td debian:buster bash /td/build.sh
