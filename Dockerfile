@@ -1,5 +1,7 @@
 FROM debian:buster
 
+RUN apt-get update
+
 RUN apt-get install -y make zlib1g-dev libssl-dev gperf cmake default-jdk clang libc++-dev libc++abi-dev
 
 RUN cd td && mkdir build && cd build
