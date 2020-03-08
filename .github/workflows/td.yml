@@ -1,0 +1,18 @@
+name: TDLib CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  TDLib:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build TDLib
+      run: docker run -v $PWD:/td debian:buster bash /td/build.sh
+    - uses: actions/upload-artifact@master
+      name: Upload TDJni Library
+      with:
+        name: libtdjni.so
+        path: libtdjni.so
