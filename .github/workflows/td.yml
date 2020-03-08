@@ -11,22 +11,11 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build TDLib
       run: docker run -v $PWD:/td debian:buster bash /td/build.sh
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        tag_name: ${{ github.sha }}
-        release_name: Release ${{ github.sha }}
-        body: 喵!
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: libtdjni.so
-        asset_name: libtdjni.so
-        asset_content_type: octet-stream
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "C${{ github.sha }}"
+        prerelease: fasle
+        title: "喵!"
+        files: |
+          libtdjni.so
