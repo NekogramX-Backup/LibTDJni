@@ -51,14 +51,14 @@ jobs:
           rm -rf build
           mkdir build
           cd build
-          cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -A x64 -DCMAKE_INSTALL_PREFIX:PATH=.. -DTD_ENABLE_JNI=ON -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../../vcpkg/scripts/buildsystems/vcpkg.cmake ..
-          cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON --build . --target install --config Release
+          cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=.. -DTD_ENABLE_JNI=ON -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../../vcpkg/scripts/buildsystems/vcpkg.cmake ..
+          cmake --debug-output --build . --target install --config Release
           cd ../..
           rm -rf build
           mkdir build
           cd build
-          cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../td/tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../vcpkg/scripts/buildsystems/vcpkg.cmake -DTd_DIR:PATH=$(Resolve-Path ../td/lib/cmake/Td) ..
-          cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON --build . --target install --config Release
+          cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../td/tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../vcpkg/scripts/buildsystems/vcpkg.cmake -DTd_DIR:PATH=$(Resolve-Path ../td/lib/cmake/Td) ..
+          cmake --build . --target install --config Release
           mv libtdjni.so ..
       - uses: actions/upload-artifact@master
         name: Upload TDJni Library
