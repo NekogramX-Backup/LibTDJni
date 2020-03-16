@@ -25,11 +25,14 @@ jobs:
           java-version: '11.0.6'
           architecture: x64
       - uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup vcpkg
+        run: |
+          git submodule add https://github.com/Microsoft/vcpkg.git
       - name: Cache vcpkg's artifacts
         uses: actions/cache@v1
         with:
           path: ${{ github.workspace }}/vcpkg/
-          key: ${{ runner.os }}
+          key: ${{ hashFiles('.git/modules/vcpkg/HEAD') }}-${{ runner.os }}
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v0
         with:
