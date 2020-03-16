@@ -52,7 +52,7 @@ jobs:
           mkdir build
           cd build
           cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=.. -DTD_ENABLE_JNI=ON -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../../vcpkg/scripts/buildsystems/vcpkg.cmake ..
-          cmake --debug-output --build . --target install --config Release
+          cmake --build . --target install --config Release --debug-output
           cd ../..
           rm -rf build
           mkdir build
