@@ -28,7 +28,7 @@ jobs:
       - name: Install gperf
         uses: crazy-max/ghaction-chocolatey@v1
         with:
-          args: install gperf
+          args: install gperf openssl
       - name: Setup vcpkg
         run: |
           git submodule add https://github.com/Microsoft/vcpkg.git
@@ -40,7 +40,7 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v0
         with:
-          vcpkgArguments: 'openssl:x64-windows zlib:x64-windows'
+          vcpkgArguments: 'zlib:x64-windows'
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
       - name: Build TDLib
         shell: bash
