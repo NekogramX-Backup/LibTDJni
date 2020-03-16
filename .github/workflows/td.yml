@@ -25,6 +25,10 @@ jobs:
           java-version: '11.0.6'
           architecture: x64
       - uses: ilammy/msvc-dev-cmd@v1
+      - name: Install gperf
+        uses: crazy-max/ghaction-chocolatey@v1
+        with:
+          args: install gperf
       - name: Setup vcpkg
         run: |
           git submodule add https://github.com/Microsoft/vcpkg.git
