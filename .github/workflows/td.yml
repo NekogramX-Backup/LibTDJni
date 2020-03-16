@@ -5,14 +5,48 @@ on:
     branches: [ master ]
 
 jobs:
-  TDLib:
+  linux64:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Build TDLib
-      run: docker run -v $PWD:/td debian:buster bash /td/build.sh
-    - uses: actions/upload-artifact@master
-      name: Upload TDJni Library
-      with:
-        name: libtdjni.so
-        path: libtdjni.so
+      - uses: actions/checkout@v2
+      - name: Build TDLib
+        run: docker run -v $PWD:/td debian:buster bash /td/build.sh
+      - uses: actions/upload-artifact@master
+        name: Upload TDJni Library
+        with:
+          name: libtdjni.so
+          path: libtdjni.so
+  win64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11.0.6'
+          architecture: x64
+      - uses: ilammy/msvc-dev-cmd@v1
+      - name: Build TDLib
+        run: |
+          git submodule init
+          git submodule update
+          git clone https://github.com/Microsoft/vcpkg.git
+          ./bootstrap-vcpkg.bat
+          ./vcpkg.exe install openssl:x64-windows zlib:x64-windows
+          cd ../td
+          Remove-Item build -Force -Recurse -ErrorAction SilentlyContinue
+          mkdir build
+          cd build
+          cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=.. -DTD_ENABLE_JNI=ON -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../../vcpkg/scripts/buildsystems/vcpkg.cmake ..
+          cmake --build . --target install --config Release
+          cd ../..
+          Remove-Item build -Force -Recurse -ErrorAction SilentlyContinue
+          mkdir build
+          cd build
+          cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../td/tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../vcpkg/scripts/buildsystems/vcpkg.cmake -DTd_DIR:PATH=$(Resolve-Path ../td/lib/cmake/Td) ..
+          cmake --build . --target install --config Release
+          Move-Item libtdjni.so ../
+      - uses: actions/upload-artifact@master
+        name: Upload TDJni Library
+        with:
+          name: tdjni.dll
+          path: tdjni.dll
