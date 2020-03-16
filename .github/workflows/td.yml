@@ -26,25 +26,27 @@ jobs:
           architecture: x64
       - uses: ilammy/msvc-dev-cmd@v1
       - name: Build TDLib
+        shell: bash
         run: |
           git submodule init
           git submodule update
           git clone https://github.com/Microsoft/vcpkg.git
+          cd vcpkg
           ./bootstrap-vcpkg.bat
           ./vcpkg.exe install openssl:x64-windows zlib:x64-windows
-          cd ../td
-          Remove-Item build -Force -Recurse -ErrorAction SilentlyContinue
+          cd ..
+          rm -rf build
           mkdir build
           cd build
           cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=.. -DTD_ENABLE_JNI=ON -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../../vcpkg/scripts/buildsystems/vcpkg.cmake ..
           cmake --build . --target install --config Release
           cd ../..
-          Remove-Item build -Force -Recurse -ErrorAction SilentlyContinue
+          rm -rf build
           mkdir build
           cd build
           cmake -A x64 -DCMAKE_INSTALL_PREFIX:PATH=../td/tdlib -DCMAKE_TOOLCHAIN_FILE:FILEPATH=../vcpkg/scripts/buildsystems/vcpkg.cmake -DTd_DIR:PATH=$(Resolve-Path ../td/lib/cmake/Td) ..
           cmake --build . --target install --config Release
-          Move-Item libtdjni.so ../
+          mv -Item libtdjni.so ..
       - uses: actions/upload-artifact@master
         name: Upload TDJni Library
         with:
