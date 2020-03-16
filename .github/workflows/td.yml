@@ -36,7 +36,7 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v0
         with:
-          vcpkgArguments: 'install openssl:x64-windows zlib:x64-windows'
+          vcpkgArguments: 'openssl:x64-windows zlib:x64-windows'
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
       - name: Build TDLib
         shell: bash
